@@ -555,7 +555,7 @@ Kyle Monangai|RB|CHI|95.5
 Xavier Worthy|WR|KC|97.8
 Sam LaPorta|TE|DET|91.9
 Brock Purdy|QB|SF|98.0
-Ricky Pearsall|WR|SF|108.1
+Ricky Pearsall|WR|SF|108.1|inactive
 J.K. Dobbins|RB|DEN|98.6
 Michael Pittman Jr.|WR|PIT|99.4
 Michael Wilson|WR|ARI|95.6
@@ -566,7 +566,7 @@ Kyle Pitts|TE|ATL|104.3
 Matthew Stafford|QB|LAR|105.6
 Jakobi Meyers|WR|JAX|106.5
 Bo Nix|QB|DEN|106.7
-Kenny Gainwell|RB|TB|107.7
+Kenneth Gainwell|RB|TB|107.1
 Rachaad White|RB|WAS|108.5
 Jared Goff|QB|DET|109.7
 Matthew Golden|WR|GB|108.8
@@ -599,7 +599,7 @@ Keaton Mitchell|RB|LAC|135.9
 Cam Ward|QB|TEN|140.8
 Chig Okonkwo|TE|WAS|140.5
 Sam Darnold|QB|SEA|142.2
-Travis Hunter|WR|JAX|141.3
+Travis Hunter|WR|JAX|141.5
 C.J. Stroud|QB|HOU|144.5
 Woody Marks|RB|HOU|141.6
 Omar Cooper|WR|NYJ|145.0
@@ -761,8 +761,8 @@ Tahj Brooks|RB|CIN|216.0
 Anthony Richardson|QB|IND|216.0`;
 
 const PLAYERS = RAW.trim().split('\n').map((line,i)=>{
-  const [name,pos,team,adp] = line.split('|');
-  return {id:i, name, pos, team, adp:+adp};
+  const [name,pos,team,adp,status='active'] = line.split('|');
+  return {id:i, name, pos, team, adp:+adp, draftable:status!=='inactive'};
 });
 
 /* ---------- schedule facts (official 2026 bye weeks / Week 17 slate) ---------- */
@@ -1003,7 +1003,7 @@ function environmentScore(p){
 const RB_RECEIVING = {
  'Bijan Robinson':3,'Jahmyr Gibbs':3,'Christian McCaffrey':3,"De'Von Achane":3,'Chase Brown':3,
  'Breece Hall':3,'Travis Etienne Jr.':3,"D'Andre Swift":3,'TreVeyon Henderson':3,'Jaylen Warren':3,
- 'Rachaad White':3,'Kenny Gainwell':3,'Tyjae Spears':3,'Woody Marks':3,'Alvin Kamara':3,
+ 'Rachaad White':3,'Kenneth Gainwell':3,'Tyjae Spears':3,'Woody Marks':3,'Alvin Kamara':3,
  'Justice Hill':3,'Samaje Perine':3,'Ty Johnson':3,
  'James Cook':2,'Omarion Hampton':2,'Ashton Jeanty':2,'Saquon Barkley':2,'Kenneth Walker III':2,
  'Josh Jacobs':2,'Bucky Irving':2,'Tony Pollard':2,'Rhamondre Stevenson':2,'Chuba Hubbard':2,
@@ -1020,6 +1020,7 @@ function rbRecv(p){ return p && p.pos==='RB' ? (RB_RECEIVING[p.name] ?? 1) : 0; 
    Positive = fade (pushes the player later). Negative = boost (pulls earlier).
    Every entry traces to a specific claim in 12ManDraftGuide.md. */
 const TAKES = {
+ 'Ricky Pearsall':{adj:-2,tags:['value']},
  /* --- guide's explicit fade list --- */
  'Josh Allen':{adj:+6,tags:['fade'],note:'Guide fade: QB1 scored 24.9 FPG in 2025, a five-year low. The elite QB tier is not separating; a Round 3 price is misallocated capital.'},
  'Lamar Jackson':{adj:+4,tags:['fade'],note:'Guide fade: elite QB cost in Rounds 3-5 for a non-separating position. Also a rushing QB, so he carries less stack value.'},
@@ -1105,7 +1106,6 @@ const TAKES = {
  'Justin Herbert':{adj:-3,tags:['value','stack'],note:'Named target in the revised guide and the core QB2 pocket (R7.12-R9.01) in the deep research: especially attractive on price and offensive-environment grounds.'},
  'D.J. Moore':{adj:-2,tags:['spike']},
  'Matthew Golden':{adj:-3,tags:['spike']},
- 'Ricky Pearsall':{adj:-2,tags:['value']},
  'Michael Wilson':{adj:-2,tags:['value']},
  'Alec Pierce':{adj:-3,tags:['spike']},
  'Rashid Shaheed':{adj:-3,tags:['spike']},
@@ -1314,7 +1314,7 @@ const PLAYER_CONTEXT_RAW = [
  {n:"Omarion Hampton", t:"LAC", p:"RB", ats:"confirmed", a:"none", r:"locked", c:"low", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["rb1-depth-chart"], note:"Both current depth-chart sources place Hampton first in the Chargers backfield with no current injury designation.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
  {n:"D'Andre Swift", t:"CHI", p:"RB", ats:"confirmed", a:"none", r:"expected", c:"moderate", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["rb1-depth-chart"], note:"Both current depth-chart sources place Swift first in Chicago's backfield, with Monangai and Johnson behind him.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
  {n:"Jonathan Taylor", t:"IND", p:"RB", ats:"confirmed", a:"none", r:"locked", c:"low", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["rb1-depth-chart"], note:"Both current depth-chart sources list Taylor as Indianapolis' clear lead back.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
- {n:"Kenny Gainwell", t:"TB", p:"RB", ats:"confirmed", a:"none", r:"committee", c:"high", v:"partial", m:["role","volume"], conf:"high", lu:"2026-07-22", tags:["secondary-back","deep-backfield"], note:"Tampa Bay identifies Bucky Irving as the top option in a deep room, while current depth charts place Gainwell among the secondary backs.", src:["bucs_offense_preview_2026","fantasydata_depthcharts_2026"]},
+ {n:"Kenneth Gainwell", t:"TB", p:"RB", ats:"confirmed", a:"none", r:"committee", c:"high", v:"partial", m:["role","volume"], conf:"high", lu:"2026-07-22", tags:["secondary-back","deep-backfield"], note:"Tampa Bay identifies Bucky Irving as the top option in a deep room, while current depth charts place Gainwell among the secondary backs.", src:["bucs_offense_preview_2026","fantasydata_depthcharts_2026"]},
  {n:"Terry McLaurin", t:"WAS", p:"WR", ats:"confirmed", a:"none", r:"locked", c:"low", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["starting-outside-receiver"], note:"Both current depth-chart sources list McLaurin as Washington's starting left wide receiver.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
  {n:"Quentin Johnston", t:"LAC", p:"WR", ats:"confirmed", a:"none", r:"expected", c:"moderate", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["starting-outside-receiver"], note:"Both current depth-chart sources list Johnston atop an outside-receiver line in Los Angeles.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
  {n:"Travis Kelce", t:"KC", p:"TE", ats:"confirmed", a:"none", r:"locked", c:"low", v:"none", m:[], conf:"medium", lu:"2026-07-29", tags:["te1-depth-chart"], note:"Both current depth-chart sources list Kelce first in Kansas City's tight-end room.", src:["ourlads_depthcharts_2026","fantasydata_depthcharts_2026"]},
@@ -1624,7 +1624,7 @@ function tierFor(pos,rank){
 }
 function allRanked(){
   if(CACHE.ranked) return CACHE.ranked;
-  const a = PLAYERS.slice().sort((x,y)=>baseRank(x)-baseRank(y) || x.adp-y.adp);
+  const a = PLAYERS.filter(p=>p.draftable).sort((x,y)=>baseRank(x)-baseRank(y) || x.adp-y.adp);
   const pc={};
   a.forEach((p,i)=>{ p.boardRank=i+1; pc[p.pos]=(pc[p.pos]||0)+1; p.posRank=pc[p.pos]; p.tier=tierFor(p.pos,p.posRank); });
   CACHE.ranked=a; return a;
